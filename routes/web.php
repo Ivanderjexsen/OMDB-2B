@@ -30,9 +30,19 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('signout');
 // });
 
 Route::get('/Favorites', function () {
-    return view('controlpanel.My');
+    $favoritePath = storage_path('app/favorites.json');
+    $favorites = [];
+
+    if (file_exists($favoritePath)) {
+        $favorites = json_decode(file_get_contents($favoritePath), true) ?: [];
+    }
+
+    return view('controlpanel.My', compact('favorites'));
 })->name('favorite');
+
+Route::post('/Favorites/remove', [DashboardController::class, 'removeFavorite'])->name('favorite.remove');
 
 Route::prefix('controlpanel')->middleware('checkLogin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('dashboard/favorite', [DashboardController::class, 'favorite'])->name('dashboard.favorite');
 });
