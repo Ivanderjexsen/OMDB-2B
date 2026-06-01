@@ -76,7 +76,13 @@ class DashboardController extends Controller
             file_put_contents($favoritePath, json_encode($favorites, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
 
-        return redirect()->back()->with('success', $exists ? __('Movie already in favorites.') : __('Movie added to favorites.'));
+        $message = $exists ? __('Movie already in favorites.') : __('Movie added to favorites.');
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => $message]);
+        }
+
+        return redirect()->back()->with('success', $message);
     }
 
     public function removeFavorite(Request $request)
@@ -102,5 +108,35 @@ class DashboardController extends Controller
         file_put_contents($favoritePath, json_encode($favorites, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         return redirect()->back()->with('success', __('Movie removed from favorites.'));
+    }
+
+    public function showDetail($imdbID)
+    {
+        $apiKey = config('services.omdb.key');
+        $apiUrl = config('services.omdb.url');
+        $movie = null;
+        $error = null;
+
+        if (!$apiKey || !$apiUrl) {
+            $error = __('OMDB API key or URL is not configured.');
+        } else {
+            $response = Http::timeout(10)->get($apiUrl, [
+                'apikey' => $apiKey,
+                'i' => $imdbID,
+            ]);
+
+            if ($response->successful()) {
+                $movie = $response->json();
+                
+                if (isset($movie['Error'])) {
+                    $error = $movie['Error'];
+                    $movie = null;
+                }
+            } else {
+                $error = __('Unable to fetch movie details from OMDB.');
+            }
+        }
+
+        return view('controlpanel.movie-detail', compact('movie', 'error', 'imdbID'));
     }
 }

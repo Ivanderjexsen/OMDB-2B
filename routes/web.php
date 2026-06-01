@@ -45,4 +45,5 @@ Route::post('/Favorites/remove', [DashboardController::class, 'removeFavorite'])
 Route::prefix('controlpanel')->middleware('checkLogin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('dashboard/favorite', [DashboardController::class, 'favorite'])->name('dashboard.favorite');
+    Route::get('movie/{imdbID}', [DashboardController::class, 'showDetail'])->name('movie.detail');
 });

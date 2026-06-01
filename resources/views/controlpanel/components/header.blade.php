@@ -50,10 +50,10 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="{{ url('lang', 'en') }}" class="dropdown-item">
-                    English
+                    {{ __('English') }}
                 </a>
                 <a href="{{ url('lang', 'id') }}" class="dropdown-item">
-                    Bahasa Indonesia
+                    {{ __('Bahasa Indonesia') }}
                 </a>
             </div>
             </li>

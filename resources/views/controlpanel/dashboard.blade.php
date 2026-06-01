@@ -64,7 +64,7 @@
                             <tr>
                               <td>
                                 @if(! empty($movie['Poster']) && $movie['Poster'] !== 'N/A')
-                                  <img src="{{ $movie['Poster'] }}" alt="{{ $movie['Title'] }}" class="img-fluid movie-poster" style="max-width: 80px; cursor: pointer;" data-title="{{ $movie['Title'] ?? '' }}" data-year="{{ $movie['Year'] ?? '' }}" data-type="{{ $movie['Type'] ?? '' }}" data-imdbid="{{ $movie['imdbID'] }}" data-poster="{{ $movie['Poster'] }}" />
+                                  <img src="{{ $movie['Poster'] }}" alt="{{ $movie['Title'] }}" class="img-fluid movie-poster" style="max-width: 80px;" data-title="{{ $movie['Title'] ?? '' }}" data-year="{{ $movie['Year'] ?? '' }}" data-type="{{ $movie['Type'] ?? '' }}" data-imdbid="{{ $movie['imdbID'] }}" data-poster="{{ $movie['Poster'] }}" />
                                 @else
                                   <span class="text-muted">{{ __('No image') }}</span>
                                 @endif
@@ -74,6 +74,9 @@
                               <td>{{ ucfirst($movie['Type'] ?? '-') }}</td>
                               <td>
                                 @if(! empty($movie['imdbID']))
+                                  <a href="{{ url('controlpanel/movie') }}/{{ $movie['imdbID'] }}" class="btn btn-sm btn-info mr-2">
+                                    <i class="fas fa-eye"></i> {{ __('Detail') }}
+                                  </a>
                                   <form method="POST" action="{{ route('dashboard.favorite') }}" class="d-inline favorite-form" data-title="{{ $movie['Title'] ?? '' }}">
                                     @csrf
                                     <input type="hidden" name="Title" value="{{ $movie['Title'] ?? '' }}">
@@ -81,8 +84,8 @@
                                     <input type="hidden" name="Type" value="{{ $movie['Type'] ?? '' }}">
                                     <input type="hidden" name="Poster" value="{{ $movie['Poster'] ?? '' }}">
                                     <input type="hidden" name="imdbID" value="{{ $movie['imdbID'] }}">
-                                    <button class="btn btn-sm btn-danger favorite-button" type="button" data-title="{{ $movie['Title'] ?? '' }}">
-                                      <i class="fas fa-heart"></i> {{ __('Love') }}
+                                    <button class="btn btn-sm btn-danger favorite-button" type="button" data-title="{{ $movie['Title'] ?? '' }}" title="{{ __('Love') }}">
+                                      <i class="fas fa-heart"></i>
                                     </button>
                                   </form>
                                 @else
@@ -136,28 +139,7 @@
         </div>
       </div>
 
-      <!-- Movie detail modal -->
-      <div class="modal fade nonblocking-modal" id="movieDetailModal" tabindex="-1" role="dialog" aria-labelledby="movieDetailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="movieDetailModalLabel"></h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body text-center">
-              <img id="detail-poster" src="" alt="" class="img-fluid mb-3" style="max-height: 350px;" />
-              <p><strong>{{ __('Year') }}:</strong> <span id="detail-year"></span></p>
-              <p><strong>{{ __('Type') }}:</strong> <span id="detail-type"></span></p>
-              <p><strong>{{ __('IMDb ID') }}:</strong> <span id="detail-imdb"></span></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
-            </div>
-          </div>
-        </div>
-      </div>
+
 
 @include("controlpanel.components.footer")
 
@@ -182,16 +164,6 @@
       if (favoriteForm) {
         favoriteForm.submit();
       }
-    });
-
-    $('.movie-poster').off('click').on('click', function () {
-      $('#movieDetailModalLabel').text($(this).data('title') || '{{ __('Movie Detail') }}');
-      $('#detail-poster').attr('src', $(this).data('poster') || '');
-      $('#detail-poster').attr('alt', $(this).data('title') || '');
-      $('#detail-year').text($(this).data('year') || '-');
-      $('#detail-type').text($(this).data('type') || '-');
-      $('#detail-imdb').text($(this).data('imdbid') || '-');
-      $('#movieDetailModal').modal({backdrop:false, keyboard:true, focus:false});
     });
   });
 </script>
