@@ -51,5 +51,8 @@
   "Cancel" : "Cancel",
   "English" : "English",
   "Bahasa Indonesia" : "Bahasa Indonesia",
-  "this movie" : "this movie"
+  "this movie" : "this movie",
+  "Movie added to favorites." : "Movie added to favorites.",
+  "Movie already in favorites." : "Movie already in favorites.",
+  "Movie removed from favorites." : "Movie removed from favorites."
 }

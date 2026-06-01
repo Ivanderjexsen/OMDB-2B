@@ -52,5 +52,8 @@
   "Cancel" : "Batal",
   "English" : "English",
   "Bahasa Indonesia" : "Bahasa Indonesia",
-  "this movie" : "film ini"
+  "this movie" : "film ini",
+  "Movie added to favorites." : "Film telah ditambahkan ke favorit.",
+  "Movie already in favorites." : "Film sudah ada di favorit.",
+  "Movie removed from favorites." : "Film telah dihapus dari favorit."
  }
